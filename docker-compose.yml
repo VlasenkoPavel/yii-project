@@ -1,0 +1,10 @@
+version: "3"
+services:
+  app:
+    image: yii-dev
+    volumes:
+      - /home/pavel/Desktop/GU/yii-project/app:/var/www/app
+    ports:
+      - "80:80"
+  db:
+    image: yii-db

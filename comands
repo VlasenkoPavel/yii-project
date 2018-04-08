@@ -1,0 +1,1 @@
+docker run -it --rm -v /home/pavel/Desktop/GU/yii-project/app:/var/www/app -p "80:80" yii-dev bash
