@@ -1,0 +1,35 @@
+
+#RewriteEngine On
+#Options +FollowSymLinks
+#RewriteCond %{HTTP_HOST} ^www.site.ru(.*)
+#RewriteRule ^(.*)$ http://site.ru/$1 [R=301,L]
+
+# <IfModule mod_rewrite.c>
+# RewriteEngine On
+# </IfModule>
+
+#RewriteEngine on
+### Если директория или файл созданы, то не использовать правила
+### а обращаться к файлу напрямую
+### для картинок например
+#RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteCond %{REQUEST_FILENAME} !-d
+#RewriteRule . index.php
+
+#Options +FollowSymLinks
+#IndexIgnore */*
+#RewriteEngine on
+#RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteCond %{REQUEST_FILENAME} !-d
+#RewriteBase /
+#RewriteRule . index.php
+
+AddDefaultCharset utf-8
+Options +FollowSymLinks
+IndexIgnore */*
+RewriteEngine on
+# if a directory or a file exists, use it directly
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+# otherwise forward it to index.php
+RewriteRule . index.php

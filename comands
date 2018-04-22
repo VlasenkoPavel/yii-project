@@ -1,1 +1,20 @@
 docker run -it --rm -v /home/pavel/Desktop/GU/yii-project/app:/var/www/app -p "80:80" yii-dev bash
+apache2-foreground &
+
+docker run -it --rm -p "5432:5432" yii-db bash
+/usr/lib/postgresql/9.3/bin/postgres -D /var/lib/postgresql/9.3/main -c config_file=/etc/postgresql/9.3/main/postgresql.conf &
+
+vendor/bin/codecept run -- -c frontend
+
+
+'add-note' => 'note/create', создаст правило, по которому по адресу /add-note будет открываться страница контроллера note и экшна create
+    мы можем описывать практически как угодно, например, так
+    'contact.html' => 'site/contact' создаст правило для страницы контактов, что бы она была доступна по адресу /contact.html
+    кроме того, мы можем использовать специальные тэги, указывающие на контроллер, экшн и даже параметры экшна
+
+'<controller:[\w-]+>-<id:\d+>.html'    => '<controller>/view', создаст правило для просмотра всех сущностей. теперь, что бы посмотреть note с id 3, нужно открыть /note-3.html
+    есть следующие тэги:
+    controller 
+    action
+    и вы можете создавать любые свои для параметров в экшне
+    что бы обозначить тэг, нужно указать <tagName:reg> , где tagName  имя тэга, reg - кегулярное выражения для того, что бы отличить этот шаблон. Тэги также можно использовать справа, как в примере, где вместо <controller> поставится note.
