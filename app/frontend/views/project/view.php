@@ -8,6 +8,8 @@ use yii\bootstrap\Modal;
 use frontend\models\domain\Project;
 use frontend\models\domain\Task;
 use frontend\models\domain_repositories\ProjectRepository;
+use frontend\models\domain_repositories\TaskRepository;
+
 
 /* @var $this yii\web\View */
 /* @var $model frontend\models\domain\Project */
@@ -24,17 +26,40 @@ $modelAttr = $model->getViewData();
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a('Update', ["project/{$model->getId()}/update"], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->getId()], [
+    <?php Modal::begin(
+                [
+                    'id' => 'projectUpdateModal',
+                    'toggleButton' => [
+                        'label' => Yii::t('app', 'update'),
+                        'tag' => 'a',
+                        'class' => 'btn btn-primary',
+                    ],
+                    'clientOptions' => false,
+                ]
+            ); ?>
+
+<!--            --><?php //Yii::$app->runAction('project/update/', ['projectId' => 1]); ?>
+
+            <?php $project = new Project(['id' => Yii::$app->user->getId()]); ?>
+            <?= $this->render('_form', ['model' => $project]) ?>
+
+            <?php if ($project->load(Yii::$app->request->post())) {
+                ProjectRepository::add($project);
+                $id = $project->getId();
+
+                return Yii::$app->getResponse()->redirect(["project/$id/task"])->send();
+            }; ?>
+
+    <?php Modal::end(); ?>
+
+    <?= Html::a('Delete', ['delete', 'id' => $model->getId()], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => 'Are you sure you want to delete this item?',
                 'method' => 'post',
             ],
-        ]) ?>
-    </p>
-
+        ]); ?>
+<p>
     <?= DetailView::widget([
         'model' => $modelAttr,
 
@@ -46,13 +71,13 @@ $modelAttr = $model->getViewData();
             'last update'
         ],
     ]) ?>
-
+</p>
     <?php
         Modal::begin(
             [
-                'id' => 'projectCreateModal',
+                'id' => 'taskCreateModal',
                 'toggleButton' => [
-                    'label' => Yii::t('app', 'create new'),
+                    'label' => Yii::t('app', 'add task'),
                     'tag' => 'a',
                     'class' => 'btn btn-success',
                 ],
@@ -60,8 +85,6 @@ $modelAttr = $model->getViewData();
             ]
         );
     ?>
-
-    <?php Pjax::begin(); ?>
 
     <?php $task = new Task(['id' => Yii::$app->user->getId()]); ?>
 
@@ -76,10 +99,9 @@ $modelAttr = $model->getViewData();
         }
     ?>
 
-    <?php Pjax::end(); ?>
-
     <?php Modal::end(); ?>
 
+    <?php Pjax::begin(); ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -100,5 +122,6 @@ $modelAttr = $model->getViewData();
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
+    <?php Pjax::end(); ?>
 
 </div>

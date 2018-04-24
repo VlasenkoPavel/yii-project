@@ -2,12 +2,12 @@
 
 namespace frontend\models\domain_repositories;
 
-use frontend\models\domain_repositories\TaskRepository;
+use frontend\models\domain_repositories\DomainRepository;
 use common\models\records\ProjectRecord;
 use common\models\User;
 use frontend\models\domain\Project;
 
-class ProjectRepository
+class ProjectRepository extends DomainRepository
 {
     public static function getById(int $projectId): Project {
         $projectRecord = ProjectRecord::findOne($projectId);

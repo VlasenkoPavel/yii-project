@@ -2,27 +2,14 @@
 
 namespace frontend\models\domain_repositories;
 
+use frontend\models\domain_repositories\DomainRepository;
 use common\models\records\TaskRecord;
-use common\models\records\UserRecord;
 use frontend\models\domain\Task;
+use common\models\User;
 
-class TaskRepository
+
+class TaskRepository extends DomainRepository
 {
-//    public static function getTaskById(int $taskId){
-//        $taskRecord = TaskRecord::findOne($taskId);
-//        $creator = UserRecord::findOne($taskRecord->creator_id);
-//        $executor = UserRecord::findOne($taskRecord->executor_id);
-//
-//        $executor ? ($executorAttributes = $executor->attributes) : $executorAttributes =[];
-//
-//        return new Task($taskRecord->attributes, $creator->attributes, $executorAttributes);
-//    }
-
-//    public static function getTasksByProjectId($projectId){
-//        $taskRecord = new TaskRecord();
-//        return $taskRecord->getTasksByProjectId($projectId);
-//    }
-
     public static function getById(int $taskId): Task {
         $taskRecord = TaskRecord::findOne($taskId);
         $creator = User::findOne($taskRecord->creator_id);
@@ -34,7 +21,7 @@ class TaskRepository
     }
 
     public static function add(Task $task) {
-        $taskRecord = new TasktRecord($task->getSaveData());
+        $taskRecord = new TaskRecord($task->getSaveData());
         $taskRecord->save();
         $task->setId($taskRecord->id);
         $task->setCreatedAt($taskRecord->created_at);

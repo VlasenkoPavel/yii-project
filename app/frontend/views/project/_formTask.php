@@ -2,8 +2,9 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use yii\jui\DatePicker;
 use common\models\User;
+use kartik\datetime\DateTimePicker;
+use dosamigos\tinymce\TinyMce;
 
 /* @var $this yii\web\View */
 /* @var $model frontend\models\Task */
@@ -16,7 +17,7 @@ use common\models\User;
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]); ?>
 
-    <?= $form->field($model, 'description')->textarea(['rows' => 6]); ?>
+    <?= $form->field($model, 'description')->widget(TinyMce::ClassName()); ?>
 
     <?php $employers = User::findAll(['role_id' => 4]);
         $employersList = [];
@@ -29,17 +30,27 @@ use common\models\User;
 
     <?= $form->field($model, 'executor["id"]')->dropDownList($employersList); ?>
 
-    <?= $form->field($model, 'deadline')->textInput() ?>
+    <?=
+        $form->field($model, 'deadline')->widget(DateTimePicker::className(),[
+            'name' => 'datetime_1',
+            'type' => DateTimePicker::TYPE_INPUT,
+            'options' => ['placeholder' => 'Select deadline...'],
+                'convertFormat' => true,
+                'value'=> date("d.m.Y h:i"),
+                'pluginOptions' => [
+                'format' => 'dd.MM.yyyy hh:i',
+                'autoclose'=>true,
+                'weekStart'=>1,
+                'startDate' => date("d.m.Y h:i"),
+                'todayBtn'=>true,
+                ]
+        ]);
+    ?>
 
     <div class="form-group">
         <?= Html::submitButton('create', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
-
-    <?= $form->field($model, 'from_date')->widget(\yii\jui\DatePicker::class, [
-        //'language' => 'ru',
-        //'dateFormat' => 'yyyy-MM-dd',
-    ]) ?>
 
 </div>

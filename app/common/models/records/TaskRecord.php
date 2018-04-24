@@ -47,36 +47,6 @@ class TaskRecord extends ActiveRecord
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function rules()
-    {
-        return [
-            [['name', 'description'], 'required'],
-            [['description'], 'string'],
-            [['executor_id'], 'integer'],
-            [['name'], 'string', 'max' => 255],
-        ];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
-    {
-        return [
-            'id' => 'ID',
-            'name' => 'Task name',
-            'description' => 'Description',
-            'creator_id' => 'Creator ID',
-            'executor' =>'Executor name',
-            'executor_id' => 'Executor',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
-            'deadline' => 'Deadline',
-        ];
-    }
 
     /**
      * @return \yii\db\ActiveQuery

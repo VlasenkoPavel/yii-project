@@ -70,7 +70,7 @@ class TaskController extends Controller
      */
     public function actionView($id)
     {
-        $task = TaskRepository::getTaskById((int)$id);
+        $task = TaskRepository::getById((int)$id);
         $searchModel = new CommentRecordSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 

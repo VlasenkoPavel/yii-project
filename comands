@@ -18,3 +18,6 @@ vendor/bin/codecept run -- -c frontend
     action
     и вы можете создавать любые свои для параметров в экшне
     что бы обозначить тэг, нужно указать <tagName:reg> , где tagName  имя тэга, reg - кегулярное выражения для того, что бы отличить этот шаблон. Тэги также можно использовать справа, как в примере, где вместо <controller> поставится note.
+
+вместо php composer.phar require --prefer-dist yiisoft/yii2-jui
+composer require --prefer-dist yiisoft/yii2-jui 
