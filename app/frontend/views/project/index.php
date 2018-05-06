@@ -16,6 +16,17 @@ use frontend\models\domain_repositories\ProjectRepository;
 $this->title = 'Projects';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
+<?php
+$script = <<< JS
+    $(document).on('click', '.test', function() {
+        $(#projectCreateModal).modal({"show": true});
+        return false;
+    });
+JS;
+$this->registerJs($script);
+?>
+
 <div class="project-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
@@ -35,7 +46,10 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'description:ntext',
             'created_at',
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => \yii\grid\ActionColumn::className(),
+                'template'=>'{update} {delete}',
+            ],
         ],
     ]); ?>
 
@@ -56,17 +70,9 @@ $this->params['breadcrumbs'][] = $this->title;
         );
     ?>
 
-    <?php $project = new Project(['id' => Yii::$app->user->getId()]); ?>
-    <?= $this->render('_form', ['model' => $project]) ?>
-
-    <?php
-        if ($project->load(Yii::$app->request->post())) {
-            ProjectRepository::add($project);
-            $id = $project->getId();
-
-        return Yii::$app->getResponse()->redirect(["project/$id/task"])->send();
-        }
-    ?>
+    <?= Yii::$app->runAction('project/create'); ?>
 
     <?php Modal::end(); ?>
+
+    <?= Html::a('test', ['create'], ['class' => 'btn btn-primary test']) ?>
 </p>

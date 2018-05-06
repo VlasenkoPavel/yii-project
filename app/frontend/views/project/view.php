@@ -20,44 +20,99 @@ $this->params['breadcrumbs'][] = $this->title;
 $projectId = $model->getId();
 $modelAttr = $model->getViewData();
 
-$this->registerJs("
-$(document).on('click', '.project-link', function() {
-    JQuery('#project-task-list-modal').modal.({\"show\":true});
-     });
-");
-
 ?>
 
 <div class="project-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <?php Modal::begin(['id' => 'project-task-list-modal', 'toggleButton' => [
-                        'label' => Yii::t('app', 'update'),
-                        'tag' => 'a',
-                        'class' => 'btn btn-primary',
-                    ]]); ?>
+    <?php Modal::begin(
+        [
+            'id' => 'projectUpdateModal',
+            'toggleButton' => [
+                'label' => Yii::t('app', 'update'),
+                'tag' => 'a',
+                'class' => 'btn btn-primary',
+            ],
+            'clientOptions' => false,
+        ]
+    ); ?>
 
-    <?php Pjax::begin(['id' => 'project-task-list-pjax-container', 'linkSelector' => '.project-link']); ?>
-    <?php Pjax::end(); ?>
+
+    <?= $this->render('_form', ['model' => $model, 'action' => 'update']) ?>
 
     <?php Modal::end(); ?>
 
-    <?= Html::a('test', ['create'], ['class' => 'btn btn-success project-link']); ?>
-
-<p>
-    <?= DetailView::widget([
-        'model' => $modelAttr,
-
-        'attributes' => [
-            'name',
-            'description:ntext',
-            'creator',
-            'creation date',
-            'last update'
+    <?= Html::a('Delete', ['delete', 'id' => $model->getId()], [
+        'class' => 'btn btn-danger',
+        'data' => [
+            'confirm' => 'Are you sure you want to delete this item?',
+            'method' => 'post',
         ],
-    ]) ?>
-</p>
+    ]); ?>
+    <p>
+        <?= DetailView::widget([
+            'model' => $modelAttr,
 
+            'attributes' => [
+                'name',
+                'description:ntext',
+                'creator',
+                'creation date',
+                'last update'
+            ],
+        ]) ?>
+    </p>
+    <?php
+    Modal::begin(
+        [
+            'id' => 'taskCreateModal',
+            'toggleButton' => [
+                'label' => Yii::t('app', 'add task'),
+                'tag' => 'a',
+                'class' => 'btn btn-success',
+            ],
+            'clientOptions' => false,
+        ]
+    );
+    ?>
+
+    <?php $task = new Task(['id' => Yii::$app->user->getId()]); ?>
+
+    <?= $this->render('_formTask', ['model' => $task]) ?>
+
+    <?php
+    if ($task->load(Yii::$app->request->post())) {
+        TaskRepository::add($task);
+        $id = $task->getId();
+
+        return Yii::$app->getResponse()->redirect(["/task/$id"])->send();
+    }
+    ?>
+
+    <?php Modal::end(); ?>
+
+    <?php Pjax::begin(); ?>
+    <?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+            [
+                'attribute' => 'name',
+                'format' => 'raw',
+                'value' => function ($model) use ($projectId)  {
+                    return Html::a($model->name, ["project/$projectId/task/$model->id"], ['id'=>'testButton', 'class' => 'table']);
+                },
+
+            ],
+            'description:ntext',
+            'executor_id',
+            'deadline',
+
+            ['class' => 'yii\grid\ActionColumn'],
+        ],
+    ]); ?>
+    <?php Pjax::end(); ?>
 
 </div>

@@ -99,7 +99,9 @@ class ProjectController extends Controller
             return $this->redirect(["project/$id/task"]);
         }
 
-        return $this->render('create', [
+        $this->layout = 'empty';
+
+        return $this->render('_form', [
             'model' => $project,
         ]);
     }
@@ -122,9 +124,8 @@ class ProjectController extends Controller
             return $this->redirect(["project/{$project->getId()}/task"]);
         }
 
-        return $this->render('create', [
-            'model' => $project,
-        ]);
+        return $this->render('_form', ['model' => $project]);
+
     }
 
     /**

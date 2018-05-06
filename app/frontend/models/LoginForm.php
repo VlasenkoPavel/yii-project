@@ -4,6 +4,7 @@ namespace frontend\models;
 
 use Yii;
 use yii\base\Model;
+use common\models\User;
 
 /**
  * LoginForm is the model behind the login form.
@@ -55,7 +56,7 @@ class LoginForm extends Model
 
     /**
      * Logs in a user using the provided username and password.
-     * @return bool whether the user is logged in successfully
+     * @return bool whether the user is logged in successfullyUser
      */
     public function login()
     {
