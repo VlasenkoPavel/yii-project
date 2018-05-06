@@ -19,10 +19,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <?php
 $script = <<< JS
-    $(document).on('click', '.test', function() {
-        $(#projectCreateModal).modal({"show": true});
-        return false;
-    });
+    $(document).on('click', '.pjax-modal-link', () => $('#projectCreateModal').modal({"show": true}));
+    // $(document).on('click', '.close', () => $(location).attr('href','/project'));
+    $(document).on('click', '.close', () => history.pushState(null, null, "/project"));
 JS;
 $this->registerJs($script);
 ?>
@@ -56,23 +55,12 @@ $this->registerJs($script);
 </div>
 
 <p>
-    <?php
-        Modal::begin(
-            [
-                'id' => 'projectCreateModal',
-                'toggleButton' => [
-                    'label' => Yii::t('app', 'create new'),
-                    'tag' => 'a',
-                    'class' => 'btn btn-success',
-                ],
-                'clientOptions' => false,
-            ]
-        );
-    ?>
+    <?php Modal::begin(['id' => 'projectCreateModal',]); ?>
 
-    <?= Yii::$app->runAction('project/create'); ?>
+        <?php Pjax::begin(['id' => 'pjaxModalContainer', 'linkSelector' => '.pjax-modal-link']); ?>
+        <?php Pjax::end(); ?>
 
     <?php Modal::end(); ?>
 
-    <?= Html::a('test', ['create'], ['class' => 'btn btn-primary test']) ?>
+    <?= Html::a('create', ['create'], ['class' => 'btn btn-primary pjax-modal-link']) ?>
 </p>
