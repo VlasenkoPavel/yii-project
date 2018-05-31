@@ -23,7 +23,7 @@ $modelAttr = $model->getViewData();
 
 $script = <<< JS
     $(document).on('click', '.pjax-modal-link', () => $('#modal').modal({"show": true}));
-    $(document).on('click', '.close', () => history.pushState(null, null, "/project/$projectId/task"));
+    $(document).on('click', '.close', () => history.back());
 JS;
 $this->registerJs($script);
 ?>
@@ -39,7 +39,7 @@ $this->registerJs($script);
 
     <?php Modal::end(); ?>
 
-    <?= Html::a('update', ["update/$projectId/update"], ['class' => 'btn btn-primary pjax-modal-link']) ?>
+    <?= Html::a('update', ["project/$projectId/blank"], ['class' => 'btn btn-primary pjax-modal-link']) ?>
 
     <?= Html::a('Delete', ['delete', 'id' => $model->getId()], [
         'class' => 'btn btn-danger',
@@ -61,56 +61,33 @@ $this->registerJs($script);
             ],
         ]) ?>
     </p>
-    <?php
-//    Modal::begin(
-//        [
-//            'id' => 'taskCreateModal',
-//            'toggleButton' => [
-//                'label' => Yii::t('app', 'add task'),
-//                'tag' => 'a',
-//                'class' => 'btn btn-success',
-//            ],
-//            'clientOptions' => false,
-//        ]
-//    );
-//    ?>
-<!---->
-<!--    --><?php //$task = new Task(['id' => Yii::$app->user->getId()]); ?>
-<!---->
-<!--    --><?//= $this->render('_formTask', ['model' => $task]) ?>
-<!---->
-<!--    --><?php
-//    if ($task->load(Yii::$app->request->post())) {
-//        TaskRepository::add($task);
-//        $id = $task->getId();
-//
-//        return Yii::$app->getResponse()->redirect(["/task/$id"])->send();
-//    }
-//    ?>
-<!---->
-<!--    --><?php //Modal::end(); ?>
+
+    <?= Html::a('add task', ["project/$projectId/task/blank"], [
+            'class' => 'btn btn-primary pjax-modal-link',
+            'projectId' => $projectId
+        ]) ?>
 
 <!--    --><?php //Pjax::begin(); ?>
-<!--    --><?//= GridView::widget([
-//        'dataProvider' => $dataProvider,
-//        'filterModel' => $searchModel,
-//        'columns' => [
-//            ['class' => 'yii\grid\SerialColumn'],
-//            [
-//                'attribute' => 'name',
-//                'format' => 'raw',
-//                'value' => function ($model) use ($projectId)  {
-//                    return Html::a($model->name, ["project/$projectId/task/$model->id"], ['id'=>'testButton', 'class' => 'table']);
-//                },
-//
-//            ],
-//            'description:ntext',
-//            'executor_id',
-//            'deadline',
-//
-//            ['class' => 'yii\grid\ActionColumn'],
-//        ],
-//    ]); ?>
+    <?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+            [
+                'attribute' => 'name',
+                'format' => 'raw',
+                'value' => function ($model) use ($projectId)  {
+                    return Html::a($model->name, ["project/$projectId/task/$model->id"], ['id'=>'testButton', 'class' => 'table']);
+                },
+
+            ],
+            'description:ntext',
+            'executor_id',
+            'deadline',
+
+            ['class' => 'yii\grid\ActionColumn'],
+        ],
+    ]); ?>
 <!--    --><?php //Pjax::end(); ?>
 
 </div>

@@ -48,7 +48,7 @@ return [
                 'task/blank' => 'task/create',
                 'task' => 'task/index',
                 '<project:[\w-]+>/<projectId:\d+>/task' => 'project/view',
-                '<project:[\w-]+>/<projectId:\d+>/update' => 'project/update',
+                '<project:[\w-]+>/<projectId:\d+>/blank' => 'project/update',
                 '<project:[\w-]+>/<projectId:\d+>' => 'project/view',
                 '<project:[\w-]+>/<projectId:\d+>/task/blank' => 'task/create',
                 '<project:[\w-]+>/<projectId:\d+>/task/<id:\d+>' => 'task/view',

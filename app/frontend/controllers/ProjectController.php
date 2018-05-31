@@ -124,7 +124,7 @@ class ProjectController extends Controller
 
         $this->layout = 'empty';
 
-        return $this->render('_form', ['model' => $project]);
+        return $this->render('_form', ['model' => $project, 'action' => 'update']);
     }
 
     /**

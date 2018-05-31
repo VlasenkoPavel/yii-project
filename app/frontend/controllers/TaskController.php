@@ -12,6 +12,7 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use frontend\models\Access;
 use frontend\models\domain_repositories\TaskRepository;
+use frontend\models\domain\Task;
 
 
 /**
@@ -86,17 +87,20 @@ class TaskController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($projectId)
     {
-        $model = new TaskRecord();
+        $task = new Task(['id' => Yii::$app->user->getId()], ['projectId' => $projectId]);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($task->load(Yii::$app->request->post())) {
+            TaskRepository::add($task);
+            $id = $task->getId();
+
+            return $this->redirect(["project/{$task->getProjectId()}/task/$id"]);
         }
 
-        return $this->render('create', [
-            'model' => $model,
-        ]);
+        $this->layout = 'min';
+
+        return $this->render('_form', ['model' => $task]);
     }
 
     /**

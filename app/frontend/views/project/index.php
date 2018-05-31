@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
 $script = <<< JS
     $(document).on('click', '.pjax-modal-link', () => $('#projectCreateModal').modal({"show": true}));
     // $(document).on('click', '.close', () => $(location).attr('href','/project'));
-    $(document).on('click', '.close', () => history.pushState(null, null, "/project"));
+    $(document).on('click', '.close', () => history.back());
 JS;
 $this->registerJs($script);
 ?>

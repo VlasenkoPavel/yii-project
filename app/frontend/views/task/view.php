@@ -11,7 +11,7 @@ use yii\grid\GridView;
 $this->title = $model->getName();
 $this->params['breadcrumbs'][] = ['label' => 'Tasks', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
-$modelAttributes = $model->getAttributes();
+$modelAttributes = $model->getViewData();
 
 ?>
 <div class="task-view">
@@ -36,8 +36,10 @@ $modelAttributes = $model->getAttributes();
             'name',
             'description:ntext',
             'creator',
+            'executor',
             'creation date',
-            'last update'
+            'last update',
+            'deadline',
         ],
     ]) ?>
 

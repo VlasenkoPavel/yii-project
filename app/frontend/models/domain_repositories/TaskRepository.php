@@ -28,7 +28,7 @@ class TaskRepository extends DomainRepository
     }
 
     public static function save(Task $task) {
-        $taskRecord = ProjectRecord::findOne($task->getId());
+        $taskRecord = TaskRecord::findOne($task->getId());
         $taskRecord->setAttributes($task->getSaveData());
         $taskRecord->save();
         $task->setUpdatedAt($taskRecord->updated_at);

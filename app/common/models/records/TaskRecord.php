@@ -6,6 +6,7 @@ use Yii;
 use \yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
 use frontend\models\query\TaskQuery;
+use common\models\User;
 
 /**
  * This is the model class for table "task".
